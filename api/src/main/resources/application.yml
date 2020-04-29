@@ -1,0 +1,11 @@
+spring.profiles.include: private
+
+management.endpoints.web.exposure.include: '*'
+
+feign.client.config.default.loggerLevel: basic
+
+logging.level:
+  com.rubenjg.ynab.client: DEBUG
+
+ynab:
+  url: https://api.youneedabudget.com/v1
