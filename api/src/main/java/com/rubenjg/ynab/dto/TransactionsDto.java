@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class AccountsDto {
+public class TransactionsDto {
 
-    private List<AccountDto> accounts;
+    private List<TransactionDto> transactions;
 }
