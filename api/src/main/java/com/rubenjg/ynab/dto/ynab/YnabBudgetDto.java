@@ -1,4 +1,4 @@
-package com.rubenjg.ynab.dto;
+package com.rubenjg.ynab.dto.ynab;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class AccountDto {
+public class YnabBudgetDto {
 
     private String id;
     private String name;

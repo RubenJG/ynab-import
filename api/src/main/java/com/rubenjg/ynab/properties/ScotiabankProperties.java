@@ -6,12 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties("ynab")
+@ConfigurationProperties("xls")
 @Getter
 @Setter
-public class YnabPrivateProperties {
+public class ScotiabankProperties {
 
-    private String personalAccessToken;
-    private String accountId;
-    private String transactionsSince;
+    private String file;
 }

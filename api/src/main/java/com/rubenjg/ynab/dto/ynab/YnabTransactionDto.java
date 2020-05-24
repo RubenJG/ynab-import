@@ -1,4 +1,4 @@
-package com.rubenjg.ynab.dto;
+package com.rubenjg.ynab.dto.ynab;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class TransactionDto {
+public class YnabTransactionDto {
 
     private String id;
     private String date;

@@ -1,4 +1,4 @@
-package com.rubenjg.ynab.dto;
+package com.rubenjg.ynab.dto.ynab;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class BudgetsDto {
+public class YnabAccountsDto {
 
-    private List<BudgetDto> budgets;
+    private List<YnabAccountDto> accounts;
 }

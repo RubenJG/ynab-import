@@ -1,4 +1,4 @@
-package com.rubenjg.ynab.dto;
+package com.rubenjg.ynab.dto.ynab;
 
 import lombok.*;
 

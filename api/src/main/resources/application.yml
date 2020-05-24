@@ -1,8 +1,13 @@
-spring.profiles.include: private
+spring:
+  application.name: YnabImport
+  cloud.loadbalancer.ribbon.enabled: false
+  profiles.include: private
 
 management.endpoints.web.exposure.include: '*'
 
-feign.client.config.default.loggerLevel: basic
+feign:
+  httpclient.enabled: true
+  client.config.default.loggerLevel: basic
 
 logging.level:
   com.rubenjg.ynab.client: DEBUG
