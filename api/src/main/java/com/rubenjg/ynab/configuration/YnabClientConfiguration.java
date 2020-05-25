@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 @Slf4j
 public class YnabClientConfiguration {
 
-    private YnabPrivateProperties ynabPrivateProperties;
+    private final YnabPrivateProperties ynabPrivateProperties;
 
     @Bean
     public RequestInterceptor requestInterceptor() {
