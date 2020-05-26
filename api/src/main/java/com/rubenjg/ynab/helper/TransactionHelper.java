@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -76,7 +77,9 @@ public class TransactionHelper {
         return Transaction.builder()
                 .date(LocalDate.parse(ynabTransactionDto.getDate(), DateTimeFormatter.ofPattern(YNAB_DATE_PATTERN)))
                 .payee(ynabTransactionDto.getPayeeName())
-                .amount(new BigDecimal(ynabTransactionDto.getAmount()).divide(new BigDecimal("1000")))
+                .amount(new BigDecimal(ynabTransactionDto.getAmount())
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .divide(new BigDecimal("1000.00"), RoundingMode.HALF_UP))
                 .source(Source.YNAB)
                 .build();
     }
@@ -99,7 +102,7 @@ public class TransactionHelper {
                 }
             }
         } catch (IOException e) {
-            log.error("An exception occurred while reading the Excel file with Scotiabank transactions");
+            log.error("An exception occurred while reading the Excel file with Scotiabank transactions", e);
         }
         return transactions.stream()
                 .map(this::mapScotibankTransaction)
@@ -120,6 +123,6 @@ public class TransactionHelper {
         if (scotiabankTransaction.getCurrency().equals(ScotiabankCurrency.USD)) {
             amount = amount.multiply(scotiabankProperties.getDollarExchange());
         }
-        return amount.negate();
+        return amount.negate().setScale(2, RoundingMode.HALF_UP);
     }
 }
