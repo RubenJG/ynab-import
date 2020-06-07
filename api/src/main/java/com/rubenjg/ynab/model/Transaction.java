@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class Transaction {
 
+    private int id;
     private LocalDate date;
     private String payee;
     private BigDecimal amount;

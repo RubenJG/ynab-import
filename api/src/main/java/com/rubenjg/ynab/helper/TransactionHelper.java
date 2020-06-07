@@ -40,6 +40,7 @@ public class TransactionHelper {
             "Rango de fechas (día/mes/año)");
     private static final String YNAB_DATE_PATTERN = "yyyy-MM-dd";
     private static final String SCOTIABANK_DATE_PATTERN = "dd/MM/yyyy";
+    private static int count = 0;
 
     private final YnabService ynabService;
     private final YnabPrivateProperties ynabPrivateProperties;
@@ -75,6 +76,7 @@ public class TransactionHelper {
 
     private Transaction mapYnabTransaction(YnabTransactionDto ynabTransactionDto) {
         return Transaction.builder()
+                .id(count++)
                 .date(LocalDate.parse(ynabTransactionDto.getDate(), DateTimeFormatter.ofPattern(YNAB_DATE_PATTERN)))
                 .payee(ynabTransactionDto.getPayeeName())
                 .amount(new BigDecimal(ynabTransactionDto.getAmount())
@@ -111,6 +113,7 @@ public class TransactionHelper {
 
     private Transaction mapScotibankTransaction(ScotiabankTransaction scotiabankTransaction) {
         return Transaction.builder()
+                .id(count++)
                 .date(LocalDate.parse(scotiabankTransaction.getDate(), DateTimeFormatter.ofPattern(SCOTIABANK_DATE_PATTERN)))
                 .payee(scotiabankTransaction.getDescription())
                 .amount(getAmount(scotiabankTransaction))

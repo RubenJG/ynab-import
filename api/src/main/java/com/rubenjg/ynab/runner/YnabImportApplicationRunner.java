@@ -2,7 +2,7 @@ package com.rubenjg.ynab.runner;
 
 import com.rubenjg.ynab.helper.TransactionHelper;
 import com.rubenjg.ynab.model.Transaction;
-import com.rubenjg.ynab.properties.ScotiabankProperties;
+import com.rubenjg.ynab.properties.AppProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -23,23 +23,15 @@ import java.util.stream.Collectors;
 public class YnabImportApplicationRunner implements ApplicationRunner {
 
     private final TransactionHelper transactionHelper;
-    private final ScotiabankProperties scotiabankProperties;
+    private final AppProperties appProperties;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        List<Transaction> scotiabankTransactions = transactionHelper.getScotiabankTransactions();
-        scotiabankTransactions.forEach(t -> log.info("T: {}", t));
-        log.info("{} transactions were found", scotiabankTransactions.size());
+    public void run(ApplicationArguments args) {
+        log.info("Retrieving Scotiabank transactions");
+        List<Transaction> scotiabankTransactions = getTransactions(transactionHelper.getScotiabankTransactions());
 
-        if (null != scotiabankProperties.getIgnoreList()) {
-            scotiabankTransactions = scotiabankTransactions.stream()
-                    .filter(this::nonIgnorableTransaction)
-                    .collect(Collectors.toList());
-        }
-
-        List<Transaction> ynabTransactions = transactionHelper.getYnabTransactions();
-        ynabTransactions.forEach(t -> log.info("T: {}", t));
-        log.info("{} YNAB transactions were found", ynabTransactions.size());
+        log.info("Retrieving YNAB transactions");
+        List<Transaction> ynabTransactions = getTransactions(transactionHelper.getYnabTransactions());
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(scotiabankTransactions);
@@ -49,7 +41,7 @@ public class YnabImportApplicationRunner implements ApplicationRunner {
         filterTransactions(
                 transactions,
                 this::fullMatch,
-                (a, b) -> log.info("Full match found"));
+                (a, b) -> log.info("Full match found\n{}\n{}", a, b));
         filterTransactions(
                 transactions,
                 this::partialMatch,
@@ -63,8 +55,20 @@ public class YnabImportApplicationRunner implements ApplicationRunner {
                 t.getSource()));
     }
 
+    private List<Transaction> getTransactions(List<Transaction> transactions) {
+        transactions.forEach(t -> log.info("T: {}", t));
+        log.info("{} transactions were found", transactions.size());
+
+        if (null != appProperties.getIgnoreList()) {
+            transactions = transactions.stream()
+                    .filter(this::nonIgnorableTransaction)
+                    .collect(Collectors.toList());
+        }
+        return transactions;
+    }
+
     private boolean nonIgnorableTransaction(Transaction transaction) {
-        return this.scotiabankProperties
+        return this.appProperties
                 .getIgnoreList()
                 .stream()
                 .noneMatch(ignore -> transaction
