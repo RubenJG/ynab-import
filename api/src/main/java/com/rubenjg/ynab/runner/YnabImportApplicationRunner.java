@@ -36,23 +36,26 @@ public class YnabImportApplicationRunner implements ApplicationRunner {
         List<Transaction> transactions = new ArrayList<>();
         transactions.addAll(scotiabankTransactions);
         transactions.addAll(ynabTransactions);
-        transactions.sort(Comparator.comparing(Transaction::getAmount));
+        transactions.sort(Comparator.comparing(Transaction::getDate));
 
         filterTransactions(
                 transactions,
                 this::fullMatch,
-                (a, b) -> log.info("Full match found\n{}\n{}", a, b));
+                (a, b) -> {});
         filterTransactions(
                 transactions,
                 this::partialMatch,
                 (a, b) -> log.info("Partial match found\n{}\n{}", a, b));
 
         log.info("Unmatched transactions:");
-        transactions.forEach(t -> log.info("{} {} {} {}",
-                t.getDate(),
-                t.getAmount(),
-                t.getPayee(),
-                t.getSource()));
+        transactions.stream()
+                .sorted(Comparator.comparing(Transaction::getSource)
+                        .thenComparing(Transaction::getDate))
+                .forEach(t -> log.info("{} {} {} {}",
+                        t.getDate(),
+                        t.getAmount(),
+                        t.getPayee(),
+                        t.getSource()));
     }
 
     private List<Transaction> getTransactions(List<Transaction> transactions) {
