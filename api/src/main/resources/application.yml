@@ -2,6 +2,7 @@ spring:
   application.name: YnabImport
   cloud.loadbalancer.ribbon.enabled: false
   profiles.include: private
+  output.ansi.enabled: ALWAYS
 
 management.endpoints.web.exposure.include: '*'
 
@@ -14,3 +15,4 @@ logging.level:
 
 ynab:
   url: https://api.youneedabudget.com/v1
+

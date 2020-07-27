@@ -13,10 +13,7 @@ import com.rubenjg.ynab.properties.YnabPrivateProperties;
 import com.rubenjg.ynab.service.YnabService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -93,13 +90,13 @@ public class TransactionHelper {
             Sheet sheet = workbook.getSheetAt(0);
             for (Iterator<Row> it = sheet.rowIterator(); it.hasNext(); ) {
                 Row row = it.next();
-                String firstCell = row.getCell(0).getStringCellValue();
-                if (!firstCell.isEmpty() && !SCOTIABANK_IGNORED_ROWS.contains(firstCell)) {
+                String firstCell = asString(row, 0);
+                if (null != firstCell && !firstCell.isEmpty() && !SCOTIABANK_IGNORED_ROWS.contains(firstCell)) {
                     transactions.add(ScotiabankTransaction.builder()
-                            .date(row.getCell(ScotiabankCellType.DATE.getIndex()).getStringCellValue())
-                            .description(row.getCell(ScotiabankCellType.DESCRIPTION.getIndex()).getStringCellValue())
-                            .amount(row.getCell(ScotiabankCellType.AMOUNT.getIndex()).getStringCellValue())
-                            .currency(ScotiabankCurrency.valueOf(row.getCell(ScotiabankCellType.CURRENCY.getIndex()).getStringCellValue()))
+                            .date(asString(row, ScotiabankCellType.DATE.getIndex()))
+                            .description(asString(row, ScotiabankCellType.DESCRIPTION.getIndex()))
+                            .amount(asString(row, ScotiabankCellType.AMOUNT.getIndex()))
+                            .currency(ScotiabankCurrency.valueOf(asString(row, ScotiabankCellType.CURRENCY.getIndex())))
                             .build());
                 }
             }
@@ -109,6 +106,17 @@ public class TransactionHelper {
         return transactions.stream()
                 .map(this::mapScotibankTransaction)
                 .collect(Collectors.toList());
+    }
+
+    private String asString(Row row, int index) {
+        String result = "";
+        if (null != row) {
+            Cell cell = row.getCell(index);
+            if (null != cell) {
+                result = cell.getStringCellValue();
+            }
+        }
+        return result;
     }
 
     private Transaction mapScotibankTransaction(ScotiabankTransaction scotiabankTransaction) {
