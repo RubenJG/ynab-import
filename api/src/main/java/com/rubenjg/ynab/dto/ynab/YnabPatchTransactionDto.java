@@ -1,20 +1,18 @@
 package com.rubenjg.ynab.dto.ynab;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rubenjg.ynab.enums.Cleared;
 import lombok.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-public class YnabTransactionDto {
+@Builder
+public class YnabPatchTransactionDto {
 
+    // TODO This model may be unnecesary if there null properties are ignored in the TransactionDto
     private String id;
-    private String date;
-    private String amount;
     private Cleared cleared;
-    @JsonProperty("payee_name")
-    private String payeeName;
 }

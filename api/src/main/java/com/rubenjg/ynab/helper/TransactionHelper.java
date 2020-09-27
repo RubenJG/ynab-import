@@ -80,6 +80,7 @@ public class TransactionHelper {
                         .setScale(2, RoundingMode.HALF_UP)
                         .divide(new BigDecimal("1000.00"), RoundingMode.HALF_UP))
                 .source(Source.YNAB)
+                .original(ynabTransactionDto)
                 .build();
     }
 
@@ -126,6 +127,7 @@ public class TransactionHelper {
                 .payee(scotiabankTransaction.getDescription())
                 .amount(getAmount(scotiabankTransaction))
                 .source(Source.SCOTIABANK)
+                .original(scotiabankTransaction)
                 .build();
     }
 

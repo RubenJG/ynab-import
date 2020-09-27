@@ -19,4 +19,5 @@ public class Transaction {
     private String payee;
     private BigDecimal amount;
     private Source source;
+    private Object original;
 }
