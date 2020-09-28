@@ -135,8 +135,6 @@ public class YnabImportApplicationRunner implements ApplicationRunner {
         }
         YnabTransactionDto ynabTransactionDto = (YnabTransactionDto) transaction.getOriginal();
         if (null != ynabTransactionDto && ynabTransactionDto.getCleared().equals(Cleared.UNCLEARED)) {
-            log.info("Cleared {}", ynabTransactionDto.getCleared());
-
             // TODO This code is duplicated. Create a method in YnabService with some sort of caching
             Optional<YnabBudgetDto> budget = ynabService.getBudgets().findFirst();
             if (budget.isPresent()) {
